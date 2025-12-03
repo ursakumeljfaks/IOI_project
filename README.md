@@ -1,4 +1,4 @@
-# 🏠 Interactive House Price Explanation Dashboard using LIME
+# Interactive House Price Explanation Dashboard using LIME
 
 An interactive visualization system that explains house price predictions using LIME (Local Interpretable Model-agnostic Explanations).
 
@@ -8,7 +8,7 @@ An interactive visualization system that explains house price predictions using 
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 This project combines machine learning with explainable AI to help users understand **what drives house prices**. Using the LIME algorithm, we provide transparent, interpretable explanations for individual price predictions.
 
@@ -22,7 +22,7 @@ This project combines machine learning with explainable AI to help users underst
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 See **[SETUP.md](SETUP.md)** for detailed installation instructions.
 ```bash
@@ -42,7 +42,7 @@ streamlit run streamlit_app/app.py
 
 ---
 
-## 📊 Demo
+## Demo
 
 ![Dashboard Preview](docs/dashboard_preview.png) *(to be added)*
 
@@ -50,7 +50,7 @@ streamlit run streamlit_app/app.py
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **ML Framework:** scikit-learn (Random Forest Regressor)
 - **Explainability:** LIME (lime-python)
@@ -60,7 +60,7 @@ streamlit run streamlit_app/app.py
 
 ---
 
-## 📖 Project Structure
+## Project Structure
 ```
 house-price-lime/
 ├── data/                   # Datasets
@@ -76,7 +76,7 @@ house-price-lime/
 
 ---
 
-## 🎓 Academic Context
+## Academic Context
 
 **Based on:**
 - Ribeiro et al., 2016: *"Why Should I Trust You?" Explaining the Predictions of Any Classifier*
@@ -90,34 +90,14 @@ house-price-lime/
 
 ---
 
-## 📅 Timeline
 
-- ✅ Project Proposal: 31.10.2025
-- 🚧 Slovenian Data Collection: In Progress
-- 🔜 User Study: December 2025
-- 📄 Project Report: Due 9.1.2026
-- 🎤 Presentation: 15.1.2026
-- 🎥 Video: 18.1.2026
-
----
-
-## 👥 Team Contributions
-
-- **Urša Kumelj** - Data collection, user study design
-- **Timen Bobnar** - Frontend development, visualization
-- **Matija Krigl** - ML model, LIME integration, backend
-
-*(roles may overlap - we work collaboratively)*
-
----
-
-## 📝 License
+## License
 
 This project is developed for academic purposes as part of the Interaction and Information Design course at University of Ljubljana.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - California Housing Dataset from scikit-learn
 - LIME library by Marco Tulio Ribeiro et al.
