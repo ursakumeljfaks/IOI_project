@@ -172,42 +172,44 @@ elif page == "📊 Data Exploration":
 
     # 3. Geospatial (California)
     with st.expander("🗺️ Geospatial Distribution of Houses in California"):
-        st.markdown("This map shows house prices across California. Circle color indicates price, and size represents population in that area. The black border shows the state boundary.")
+        st.markdown("This map shows house prices across California...")
+
+        # Load California geojson
         geojson_path = os.path.join(current_dir, '..', 'data', 'json', 'california.geojson')
         with open(geojson_path) as f:
             ca_geo_single = json.load(f)
+
         ca_geo = {"type": "FeatureCollection", "features": [ca_geo_single]}
 
-        all_coords = []
-        geom = ca_geo['features'][0]['geometry']
-        if geom['type'] == 'Polygon':
-            for ring in geom['coordinates']:
-                all_coords.extend(ring)
-        elif geom['type'] == 'MultiPolygon':
-            for polygon in geom['coordinates']:
-                for ring in polygon:
-                    all_coords.extend(ring)
-
-        lons = [p[0] for p in all_coords]
-        lats = [p[1] for p in all_coords]
-
-        ca_layer = alt.Chart(alt.Data(values=[ca_geo['features'][0]])).mark_geoshape(
-            fill=None, stroke='black', strokeWidth=2
-        ).encode()
-
-        scatter_layer = alt.Chart(df).mark_circle().encode(
-            x=alt.X('Longitude:Q', scale=alt.Scale(domain=[min(lons), max(lons)])),
-            y=alt.Y('Latitude:Q', scale=alt.Scale(domain=[min(lats), max(lats)])),
-            color=alt.Color('MedHouseVal:Q', scale=alt.Scale(scheme='viridis')),
-            size=alt.Size('Population:Q', scale=alt.Scale(range=[10, 500])),
-            tooltip=['MedHouseVal', 'MedInc', 'HouseAge', 'Population']
+        # Base CA shape
+        ca_layer = (
+            alt.Chart(alt.Data(values=[ca_geo['features'][0]]))
+            .mark_geoshape(fill=None, stroke="black", strokeWidth=2)
+            .project(type="mercator")
         )
 
-        geo_chart = alt.layer(ca_layer, scatter_layer).properties(
-            width='container', height=600,
-            title='California House Prices with State Border'
-        ).interactive()
+        # Scatter layer using same projection
+        scatter_layer = (
+            alt.Chart(df)
+            .mark_circle()
+            .encode(
+                longitude='Longitude:Q',
+                latitude='Latitude:Q',
+                color=alt.Color('MedHouseVal:Q', scale=alt.Scale(scheme='viridis')),
+                size=alt.Size('Population:Q', scale=alt.Scale(range=[10, 500])),
+                tooltip=['MedHouseVal', 'MedInc', 'HouseAge', 'Population'],
+            )
+            .project(type="mercator")   # <-- KEY FIX
+        )
+
+        geo_chart = (
+            alt.layer(ca_layer, scatter_layer)
+            .properties(width="container", height=600, title="California House Prices with State Border")
+            .interactive()
+        )
+
         st.altair_chart(geo_chart, use_container_width=True)
+
 
     # 4. Correlation heatmap
     with st.expander("📈 Feature Correlation Heatmap"):
