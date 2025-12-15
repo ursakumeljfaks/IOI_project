@@ -19,12 +19,12 @@ from src.explainer import LIMEExplainer
 # Page config
 st.set_page_config(
     page_title="House Price LIME Dashboard",
-    page_icon="🏠",
+    page_icon="",
     layout="wide"
 )
 
 # Title
-st.title("🏠 Interactive House Price Explanation Dashboard")
+st.title("Interactive House Price Explanation Dashboard")
 st.markdown("### Understanding what drives house prices using LIME")
 st.markdown("**Team:** Urša Kumelj, Timen Bobnar, Matija Krigl")
 st.markdown("---")
@@ -52,7 +52,7 @@ try:
     st.success("✓ Model loaded successfully!")
     
     # Sidebar - Input parameters
-    st.sidebar.header("🎛️ House Features")
+    st.sidebar.header("House Features")
     st.sidebar.markdown("Adjust the sliders to see how price changes")
     
     # Get feature ranges from data
@@ -93,12 +93,12 @@ try:
     # Display prediction
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("💰 Predicted Price", f"${prediction * 100000:,.0f}")
+        st.metric("Predicted Price", f"${prediction * 100000:,.0f}")
     with col2:
-        st.metric("📊 Median Dataset Price", f"${df['MedHouseVal'].median() * 100000:,.0f}")
+        st.metric("Median Dataset Price", f"${df['MedHouseVal'].median() * 100000:,.0f}")
     with col3:
         diff = ((prediction - df['MedHouseVal'].median()) / df['MedHouseVal'].median()) * 100
-        st.metric("📈 vs Median", f"{diff:+.1f}%", delta=f"{diff:+.1f}%")
+        st.metric("vs Median", f"{diff:+.1f}%", delta=f"{diff:+.1f}%")
     
     st.markdown("---")
     
@@ -114,7 +114,7 @@ try:
     explanation = explainer.explain_instance(input_scaled[0], num_features=8)
     
     # Display LIME explanation
-    st.header("📊 Why This Price? (LIME Explanation)")
+    st.header("Why This Price? (LIME Explanation)")
     st.markdown("LIME shows which features are pushing the price **up** (green) or **down** (red)")
     
     top_features = explainer.get_top_features(explanation, n=8)
@@ -162,14 +162,14 @@ try:
         """)
     
     # Feature values table
-    with st.expander("📋 See Current Feature Values"):
+    with st.expander("See Current Feature Values"):
         display_df = input_df.T.rename(columns={0: 'Value'})
         display_df['Description'] = display_df.index.map(feature_descriptions)
         st.dataframe(display_df[['Description', 'Value']], use_container_width=True)
     
     # What-if analysis section
     st.markdown("---")
-    st.header("🔮 What-If Analysis")
+    st.header("What If Analysis")
     st.markdown("See how changing specific features affects the price prediction")
     
     selected_feature = st.selectbox(
@@ -223,7 +223,7 @@ try:
     st.plotly_chart(fig_whatif, use_container_width=True)
 
     st.markdown("---")
-    st.header("📊 Data Exploration with Vega-Lite")
+    st.header("Data Exploration with Vega-Lite")
 
     # 1️⃣ Price Distribution
     st.subheader("Distribution of House Prices")
@@ -337,9 +337,9 @@ try:
 
 
 except FileNotFoundError:
-    st.error("⚠️ Model not found! Please run the training notebook first.")
+    st.error("Model not found! Please run the training notebook first.")
     st.info("Run: `jupyter notebook` and execute `notebooks/02_train_model.ipynb`")
 except Exception as e:
-    st.error(f"❌ Error: {str(e)}")
+    st.error(f"Error: {str(e)}")
     import traceback
     st.code(traceback.format_exc())

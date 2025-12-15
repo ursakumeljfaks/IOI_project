@@ -18,12 +18,12 @@ from src.explainer import LIMEExplainer
 # Page config
 st.set_page_config(
     page_title="House Price App",
-    page_icon="🏠",
+    page_icon="",
     layout="wide"
 )
 
 # --- Navigation ---
-page = st.radio("Navigate to:", ["🏠 Price Prediction", "📊 Data Exploration"], horizontal=True)
+page = st.radio("Navigate to:", ["Price Prediction", "Data Exploration"], horizontal=True)
 
 # --- Load resources ---
 @st.cache_resource
@@ -42,19 +42,19 @@ try:
     model = load_model()
     df = load_data()
 except FileNotFoundError:
-    st.error("⚠️ Model or data not found! Make sure `house_price_model.pkl` and CSV exist.")
+    st.error("Model or data not found! Make sure `house_price_model.pkl` and CSV exist.")
     st.stop()
 except Exception as e:
-    st.error(f"❌ Error loading resources: {str(e)}")
+    st.error(f"Error loading resources: {str(e)}")
     st.stop()
 
 # --- Price Prediction Page ---
-if page == "🏠 Price Prediction":
-    st.title("🏠 Interactive House Price Prediction")
+if page == "Price Prediction":
+    st.title("Interactive House Price Prediction")
     st.markdown("Adjust house features in the sidebar to see the predicted price.")
 
     # Sidebar features
-    st.sidebar.header("🎛️ House Features")
+    st.sidebar.header("House Features")
     feature_descriptions = {
         'MedInc': 'Median Income (in $10k)',
         'HouseAge': 'House Age (years)',
@@ -81,10 +81,10 @@ if page == "🏠 Price Prediction":
     prediction = model.predict(input_df)[0]
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("💰 Predicted Price", f"${prediction*100000:,.0f}")
-    col2.metric("📊 Median Dataset Price", f"${df['MedHouseVal'].median()*100000:,.0f}")
+    col1.metric("Predicted Price", f"${prediction*100000:,.0f}")
+    col2.metric("Median Dataset Price", f"${df['MedHouseVal'].median()*100000:,.0f}")
     diff = ((prediction - df['MedHouseVal'].median()) / df['MedHouseVal'].median())*100
-    col3.metric("📈 vs Median", f"{diff:+.1f}%", delta=f"{diff:+.1f}%")
+    col3.metric(" vs Median", f"{diff:+.1f}%", delta=f"{diff:+.1f}%")
 
     st.markdown("---")
 
@@ -116,14 +116,14 @@ if page == "🏠 Price Prediction":
     st.plotly_chart(fig, use_container_width=True)
 
     # Feature table
-    with st.expander("📋 Feature Values"):
+    with st.expander("Feature Values"):
         display_df = input_df.T.rename(columns={0: 'Value'})
         display_df['Description'] = display_df.index.map(feature_descriptions)
         st.dataframe(display_df[['Description', 'Value']], use_container_width=True)
 
     # What-if analysis
     st.markdown("---")
-    st.header("🔮 What-If Analysis")
+    st.header("Analysis")
     selected_feature = st.selectbox(
         "Feature to analyze:", options=model.feature_names,
         format_func=lambda x: feature_descriptions.get(x, x)
@@ -146,60 +146,21 @@ if page == "🏠 Price Prediction":
     st.plotly_chart(fig_whatif, use_container_width=True)
 
 # --- Data Exploration Page ---
-elif page == "📊 Data Exploration":
-    st.title("📊 Data Exploration with Vega-Lite")
+elif page == "Data Exploration":
+    st.title("Data Exploration with Vega-Lite")
 
     # 1. Price distribution
-    # with st.expander("🏠 Distribution of House Prices"):
-    #     st.markdown("This histogram shows how median house prices are distributed across California. You can see which price ranges are most common.")
-    #     price_hist = alt.Chart(df).mark_bar().encode(
-    #         alt.X('MedHouseVal', bin=alt.Bin(maxbins=50), title='Median House Value ($100k)'),
-    #         y='count()',
-    #         tooltip=['count()']
-    #     ).properties(height=300, width='container')
-    #     st.altair_chart(price_hist, use_container_width=True)
-    with st.expander("🏠 Distribution of House Prices"):
-        st.markdown(
-            "These plots show how median house prices are distributed across California:\n"
-            "- Left: Histogram showing frequency of different price ranges\n"
-            "- Right: Boxplot showing median, quartiles, and outliers"
-        )
-
-        # Histogram
-        hist = alt.Chart(df).mark_bar(color="#3b82f6").encode(
-            alt.X('MedHouseVal', bin=alt.Bin(maxbins=50), title='Median House Value (in $100k)'),
+    with st.expander("Distribution of House Prices"):
+        st.markdown("This histogram shows how median house prices are distributed across California. You can see which price ranges are most common.")
+        price_hist = alt.Chart(df).mark_bar().encode(
+            alt.X('MedHouseVal', bin=alt.Bin(maxbins=50), title='Median House Value ($100k)'),
             y='count()',
             tooltip=['count()']
-        ).properties(
-            width=500,
-            height=300,
-            title='Distribution of House Prices'
-        )
-
-        # Boxplot
-        box = alt.Chart(df).mark_boxplot(extent='min-max', color="#22c55e").encode(
-        y=alt.Y('MedHouseVal', title='Median House Value (in $100k)'),
-        tooltip=['MedHouseVal']
-            ).properties(
-                width=150,
-                height=300,
-                title='House Price Boxplot'
-            )
-
-        # Combine horizontally 
-        combined = alt.hconcat(hist, box)
-        st.altair_chart(combined, use_container_width=True)
-
-        st.markdown(
-        "#### Summary:\n"
-        "- Most California houses are moderately priced, around \$100k–\$200k.\n"
-        "- The histogram shows a right-skewed distribution: a few houses are very expensive.\n"
-        "- The boxplot confirms this: median price is ~1.8 (\$100k units) and there are some high-value outliers.\n"
-        "- Together, these plots help understand the spread, common price ranges, and extreme values."
-    )
+        ).properties(height=300, width='container')
+        st.altair_chart(price_hist, use_container_width=True)
 
     # 2. Price vs Median Income
-    with st.expander("💰 Price vs Median Income"):
+    with st.expander("Price vs Median Income"):
         st.markdown("This scatter plot shows the relationship between median income and house prices. Color indicates population, showing areas with more people.")
         scatter_income = alt.Chart(df).mark_circle(size=60).encode(
             x='MedInc',
@@ -208,15 +169,9 @@ elif page == "📊 Data Exploration":
             tooltip=['MedInc', 'HouseAge', 'MedHouseVal']
         ).interactive().properties(height=300, width='container')
         st.altair_chart(scatter_income, use_container_width=True)
-        st.markdown(
-            "#### Summary:\n"
-            "- Houses tend to be more expensive in neighborhoods with higher median income.\n"
-            "- Most houses are in moderately populated areas with mid-range prices.\n"
-            "- Population helps identify which areas are densely populated versus more sparse."
-        )
 
     # 3. Geospatial (California)
-    with st.expander("🗺️ Geospatial Distribution of Houses in California"):
+    with st.expander("Geospatial Distribution of Houses in California"):
         st.markdown("This map shows house prices across California...")
 
         # Load California geojson
@@ -254,47 +209,16 @@ elif page == "📊 Data Exploration":
         )
 
         st.altair_chart(geo_chart, use_container_width=True)
-        st.markdown(
-            "#### Summary:\n"
-            "- The map shows house prices across California, with each point representing a neighborhood.\n"
-            "- **Color** indicates house price: darker/lighter shades show higher/lower prices.\n"
-            "- **Size** reflects population: bigger circles are more populated areas.\n"
-            "- You can visually identify regions with high prices, clusters of dense population, and how prices vary geographically.\n"
-            "- Coastal and urban areas typically have higher prices, while inland regions are more moderately priced."
-        )
 
-    # # 4. Correlation heatmap
-    with st.expander("📈 Feature Correlation Heatmap"):
-        st.markdown(
-            "This heatmap shows how features relate to each other. "
-            "Darker colors indicate stronger positive or negative correlations, helping identify patterns in the dataset."
-        )
 
-        # Compute correlation
+    # 4. Correlation heatmap
+    with st.expander("Feature Correlation Heatmap"):
+        st.markdown("This heatmap shows how features relate to each other. Darker colors indicate stronger positive or negative correlations, helping identify patterns in the dataset.")
         corr = df.corr().reset_index().melt('index')
-        corr.columns = ['Feature1', 'Feature2', 'Correlation']
-
-        # Altair heatmap
         heatmap = alt.Chart(corr).mark_rect().encode(
-            x=alt.X('Feature2:N', sort=None, title=None),
-            y=alt.Y('Feature1:N', sort=None, title=None),
-            color=alt.Color('Correlation:Q', scale=alt.Scale(scheme='redblue', domain=[-1,1]), title='Correlation'),
-            tooltip=['Feature1', 'Feature2', alt.Tooltip('Correlation:Q', format=".2f")]
-        ).properties(
-            width=500,
-            height=500,
-            title="Feature Correlation Matrix"
-        )
-
+            x='index:O',
+            y='variable:O',
+            color='value:Q',
+            tooltip=['index', 'variable', 'value']
+        ).properties(height=300, width='container')
         st.altair_chart(heatmap, use_container_width=True)
-
-        # Short correlation summary
-        st.markdown("**Correlation Insights:**")
-        st.markdown("""
-        - **MedInc → MedHouseVal:** Strong positive correlation. Higher income → higher house prices.  
-        - **HouseAge → MedHouseVal:** Moderate positive correlation. Older houses slightly more expensive.  
-        - **AveRooms & AveBedrms → MedHouseVal:** Slight positive correlation; rooms and bedrooms increase price slightly.  
-        - **Population → MedHouseVal:** Weak correlation; population has little effect on price.  
-        - **Latitude & Longitude → MedHouseVal:** Moderate effect; location affects price.  
-        - **AveRooms & AveBedrms:** Highly correlated with each other → may cause multicollinearity.  
-        """)
