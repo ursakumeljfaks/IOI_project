@@ -204,85 +204,95 @@ if page == "Price Prediction":
 elif page == "Data Exploration":
     st.title("Data Exploration with Vega-Lite")
 
+    # 1. Price distribution
     with st.expander("Distribution of House Prices"):
-        st.markdown("This scatter plot illustrates the relationship between median income and median house value. Point color represents population size, providing additional context about density.")
-        price_hist = alt.Chart(df).mark_bar().encode(
-            alt.X('MedHouseVal', bin=alt.Bin(maxbins=50), title='Median House Value ($100k)'),
+        st.markdown(
+            "These plots show how median house prices are distributed across California:\n"
+            "- Left: Histogram showing frequency of different price ranges\n"
+            "- Right: Boxplot showing median, quartiles, and outliers"
+        )
+
+        # Histogram
+        hist = alt.Chart(df).mark_bar(color="#3b82f6").encode(
+            alt.X('MedHouseVal', bin=alt.Bin(maxbins=50), title='Median House Value (in $100k)'),
             y='count()',
             tooltip=['count()']
-        ).properties(height=300, width='container')
-        st.altair_chart(price_hist, use_container_width=True)
+        ).properties(
+            width=500,
+            height=300,
+            title='Distribution of House Prices'
+        )
 
+        # Boxplot
+        box = alt.Chart(df).mark_boxplot(extent='min-max', color="#22c55e").encode(
+        y=alt.Y('MedHouseVal', title='Median House Value (in $100k)'),
+        tooltip=['MedHouseVal']
+            ).properties(
+                width=150,
+                height=300,
+                title='House Price Boxplot'
+            )
+
+        # Combine horizontally 
+        combined = alt.hconcat(hist, box)
+        st.altair_chart(combined, use_container_width=True)
+
+        st.markdown(
+        "#### Summary:\n"
+        "- Most California houses are moderately priced, around \$100k–\$200k.\n"
+        "- The histogram shows a right-skewed distribution: a few houses are very expensive.\n"
+        "- The boxplot confirms this: median price is ~1.8 (\$100k units) and there are some high-value outliers.\n"
+        "- Together, these plots help understand the spread, common price ranges, and extreme values."
+    )
+
+    # 2. Price vs Median Income
     with st.expander("Price vs Median Income"):
-        st.markdown("This scatter plot shows how median house prices relate to median household income. Each point represents one district. Color intensity reflects population size.")
+        st.markdown("This scatter plot shows the relationship between median income and house prices. Color indicates population, showing areas with more people.")
         scatter_income = alt.Chart(df).mark_circle(size=60).encode(
-            x=alt.X(
-                'MedInc:Q',
-                title='Median Household Income (× $10,000)'
-            ),
-            y=alt.Y(
-                'MedHouseVal:Q',
-                title='Median House Price (× $100,000)'
-            ),
-            color=alt.Color(
-                'Population:Q',
-                title='Population',
-                scale=alt.Scale(scheme='viridis')
-            ),
-            tooltip=[
-                alt.Tooltip('MedInc:Q', title='Median Income (× $10,000)'),
-                alt.Tooltip('HouseAge:Q', title='House Age (years)'),
-                alt.Tooltip('MedHouseVal:Q', title='House Price (× $100,000)'),
-                alt.Tooltip('Population:Q', title='Population')
-            ]
+            x='MedInc',
+            y='MedHouseVal',
+            color='Population',
+            tooltip=['MedInc', 'HouseAge', 'MedHouseVal']
         ).interactive().properties(height=300, width='container')
         st.altair_chart(scatter_income, use_container_width=True)
+        st.markdown(
+            "#### Summary:\n"
+            "- Houses tend to be more expensive in neighborhoods with higher median income.\n"
+            "- Most houses are in moderately populated areas with mid-range prices.\n"
+            "- Population helps identify which areas are densely populated versus more sparse."
+        )
 
+    # 3. Geospatial (California)
     with st.expander("Geospatial Distribution of Houses in California"):
-        st.markdown("This map visualizes the geographic distribution of median house prices across California. Each point represents a district from the dataset, where color indicates the median house value and point size corresponds to population. The state border is shown for geographic reference.")
+        st.markdown("This map shows house prices across California...")
+
+        # Load California geojson
         geojson_path = os.path.join(current_dir, '..', 'data', 'json', 'california.geojson')
         with open(geojson_path) as f:
             ca_geo_single = json.load(f)
 
         ca_geo = {"type": "FeatureCollection", "features": [ca_geo_single]}
 
+        # Base CA shape
         ca_layer = (
             alt.Chart(alt.Data(values=[ca_geo['features'][0]]))
             .mark_geoshape(fill=None, stroke="black", strokeWidth=2)
             .project(type="mercator")
         )
 
+        # Scatter layer using same projection
         scatter_layer = (
             alt.Chart(df)
             .mark_circle()
             .encode(
-                longitude=alt.Longitude(
-                    'Longitude:Q',
-                    title='Longitude'
-                ),
-                latitude=alt.Latitude(
-                    'Latitude:Q',
-                    title='Latitude'
-                ),
-                color=alt.Color(
-                    'MedHouseVal:Q',
-                    title='Median House Price (× $100,000)',
-                    scale=alt.Scale(scheme='viridis')
-                ),
-                size=alt.Size(
-                    'Population:Q',
-                    title='Population',
-                    scale=alt.Scale(range=[10, 500])
-                ),
-                tooltip=[
-                    alt.Tooltip('MedHouseVal:Q', title='House Price (× $100,000)'),
-                    alt.Tooltip('MedInc:Q', title='Median Income (× $10,000)'),
-                    alt.Tooltip('HouseAge:Q', title='House Age (years)'),
-                    alt.Tooltip('Population:Q', title='Population')
-                ],
-                    )
-                .project(type="mercator")  
+                longitude='Longitude:Q',
+                latitude='Latitude:Q',
+                color=alt.Color('MedHouseVal:Q', scale=alt.Scale(scheme='viridis')),
+                size=alt.Size('Population:Q', scale=alt.Scale(range=[10, 500])),
+                tooltip=['MedHouseVal', 'MedInc', 'HouseAge', 'Population'],
             )
+            .project(type="mercator")   # <-- KEY FIX
+        )
 
         geo_chart = (
             alt.layer(ca_layer, scatter_layer)
@@ -291,24 +301,47 @@ elif page == "Data Exploration":
         )
 
         st.altair_chart(geo_chart, use_container_width=True)
-
-
-    with st.expander("Feature Correlation Heatmap"):
-        st.markdown("This heatmap shows pairwise correlations between numerical features in the dataset. Stronger colors indicate stronger positive or negative relationships, which can help identify dependencies between variables.")
-        corr = df.corr().reset_index().melt('index')
-        heatmap = alt.Chart(corr).mark_rect().encode(
-            x=alt.X('index:O', title='Feature'),
-            y=alt.Y('variable:O', title='Feature'),
-            color=alt.Color(
-                'value:Q',
-                title='Correlation Coefficient',
-                scale=alt.Scale(scheme='redblue', domainMid=0)
-            ),
-            tooltip=[
-                alt.Tooltip('index:O', title='Feature 1'),
-                alt.Tooltip('variable:O', title='Feature 2'),
-                alt.Tooltip('value:Q', title='Correlation')
-            ]
+        st.markdown(
+            "#### Summary:\n"
+            "- The map shows house prices across California, with each point representing a neighborhood.\n"
+            "- **Color** indicates house price: darker/lighter shades show higher/lower prices.\n"
+            "- **Size** reflects population: bigger circles are more populated areas.\n"
+            "- You can visually identify regions with high prices, clusters of dense population, and how prices vary geographically.\n"
+            "- Coastal and urban areas typically have higher prices, while inland regions are more moderately priced."
         )
+
+    # # 4. Correlation heatmap
+    with st.expander("Feature Correlation Heatmap"):
+        st.markdown(
+            "This heatmap shows how features relate to each other. "
+            "Darker colors indicate stronger positive or negative correlations, helping identify patterns in the dataset."
+        )
+
+        # Compute correlation
+        corr = df.corr().reset_index().melt('index')
+        corr.columns = ['Feature1', 'Feature2', 'Correlation']
+
+        # Altair heatmap
+        heatmap = alt.Chart(corr).mark_rect().encode(
+            x=alt.X('Feature2:N', sort=None, title=None),
+            y=alt.Y('Feature1:N', sort=None, title=None),
+            color=alt.Color('Correlation:Q', scale=alt.Scale(scheme='redblue', domain=[-1,1]), title='Correlation'),
+            tooltip=['Feature1', 'Feature2', alt.Tooltip('Correlation:Q', format=".2f")]
+        ).properties(
+            width=500,
+            height=500,
+            title="Feature Correlation Matrix"
+        )
+
         st.altair_chart(heatmap, use_container_width=True)
 
+        # Short correlation summary
+        st.markdown("**Correlation Insights:**")
+        st.markdown("""
+        - **MedInc → MedHouseVal:** Strong positive correlation. Higher income → higher house prices.  
+        - **HouseAge → MedHouseVal:** Moderate positive correlation. Older houses slightly more expensive.  
+        - **AveRooms & AveBedrms → MedHouseVal:** Slight positive correlation; rooms and bedrooms increase price slightly.  
+        - **Population → MedHouseVal:** Weak correlation; population has little effect on price.  
+        - **Latitude & Longitude → MedHouseVal:** Moderate effect; location affects price.  
+        - **AveRooms & AveBedrms:** Highly correlated with each other → may cause multicollinearity.  
+        """)
