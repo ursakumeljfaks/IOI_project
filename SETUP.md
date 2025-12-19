@@ -1,4 +1,4 @@
-# 🚀 House Price LIME Dashboard - Setup Instructions
+# House Price LIME Dashboard - Setup Instructions
 
 **Project:** Interactive House Price Explanation using LIME  
 **Team:** Urša Kumelj, Timen Bobnar, Matija Krigl  
@@ -188,7 +188,7 @@ import lime
 import streamlit
 import plotly
 
-print("✅ All packages imported successfully!")
+print("All packages imported successfully!")
 print(f"Python: {__import__('sys').version}")
 print(f"pandas: {pd.__version__}")
 print(f"streamlit: {streamlit.__version__}")
@@ -229,4 +229,4 @@ Once you have everything running:
 
 ---
 
-**Questions? Issues? Reach out to the team!** 🚀
+**Questions? Issues? Reach out to the team!** 
