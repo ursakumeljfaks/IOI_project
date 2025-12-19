@@ -6,7 +6,7 @@
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Python 3.11** (pomembno! 3.14 ne dela zaradi PyArrow)
 - **Git** installed
@@ -14,7 +14,7 @@
 
 ---
 
-## ⚙️ Installation Steps
+##  Installation Steps
 
 ### 1. Clone the Repository
 ```bash
@@ -54,7 +54,7 @@ This will install:
 
 ---
 
-## 🏃 Running the Project
+## Running the Project
 
 ### Option A: Run Streamlit Dashboard (Interactive UI)
 ```bash
@@ -65,10 +65,10 @@ streamlit run streamlit_app/app.py
 **Opens automatically in browser:** http://localhost:8501
 
 **What you'll see:**
-- 🎛️ Sliders on left sidebar to adjust house features
-- 💰 Predicted price in real-time
-- 📊 LIME explanation chart (green/red bars)
-- 🔮 What-if analysis at bottom
+- Sliders on left sidebar to adjust house features
+- Predicted price in real-time
+- LIME explanation chart (green/red bars)
+- What-if analysis at bottom
 
 **To stop:** Press `Ctrl+C` in terminal
 
@@ -90,7 +90,7 @@ jupyter notebook
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 ```
 house-price-lime/
 ├── data/
@@ -112,7 +112,7 @@ house-price-lime/
 
 ---
 
-## 🔄 First Time Setup - Train the Model
+## First Time Setup - Train the Model
 
 **Important:** The trained model (`house_price_model.pkl`) is NOT in Git because it's 34MB.  
 You need to train it once:
@@ -137,7 +137,7 @@ jupyter notebook
 
 ---
 
-## 🛠️ Common Issues & Solutions
+## Common Issues & Solutions
 
 ### Issue: `ModuleNotFoundError: No module named 'src'`
 **Solution:** Make sure you're running from project root directory:
@@ -175,7 +175,7 @@ streamlit run streamlit_app/app.py --server.port 8502
 
 ---
 
-## 🧪 Testing the Setup
+## Testing the Setup
 
 Run this quick test to verify everything works:
 ```python
@@ -198,7 +198,7 @@ PYTEST
 
 ---
 
-## 📞 Getting Help
+## Getting Help
 
 **If you encounter issues:**
 
@@ -209,7 +209,7 @@ PYTEST
 
 ---
 
-## 🎯 Next Steps
+## Next Steps
 
 Once you have everything running:
 
@@ -220,7 +220,7 @@ Once you have everything running:
 
 ---
 
-## 📚 Useful Resources
+## Useful Resources
 
 - **LIME Paper:** Ribeiro et al., 2016 - "Why Should I Trust You?"
 - **Streamlit Docs:** https://docs.streamlit.io

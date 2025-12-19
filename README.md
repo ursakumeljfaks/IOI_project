@@ -14,11 +14,11 @@ This project combines machine learning with explainable AI to help users underst
 
 ### Key Features
 
-- 🤖 **Random Forest Model** trained on 20,640 California housing samples
-- 🔍 **LIME Explanations** showing top features impacting each prediction
-- 📊 **Interactive Dashboard** built with Streamlit
-- 🎛️ **What-If Analysis** - adjust features and see real-time price changes
-- 🌍 **Multi-Market Support** - designed to work with both US and Slovenian data
+- **Random Forest Model** trained on 20,640 California housing samples
+- **LIME Explanations** showing top features impacting each prediction
+- **Interactive Dashboard** built with Streamlit
+- **What-If Analysis** - adjust features and see real-time price changes
+- **Multi-Market Support** - designed to work with both US and Slovenian data
 
 ---
 
