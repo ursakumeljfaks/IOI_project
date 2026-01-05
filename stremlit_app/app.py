@@ -189,8 +189,8 @@ if page == "Price Prediction":
     predictions = [model.predict(input_df.assign(**{selected_feature: val}))[0]*100000 for val in feature_values]
 
     fig_whatif = go.Figure()
-    fig_whatif.add_trace(go.Scatter(x=feature_values, y=predictions, mode='lines', line=dict(color='#3b82f6', width=3)))
-    fig_whatif.add_trace(go.Scatter(x=[features[selected_feature]], y=[prediction*100000], mode='markers', marker=dict(size=15, color='#ef4444', symbol='star')))
+    fig_whatif.add_trace(go.Scatter(x=feature_values, y=predictions, mode='lines', name='What-If curve', line=dict(color='#3b82f6', width=3)))
+    fig_whatif.add_trace(go.Scatter(x=[features[selected_feature]], y=[prediction*100000], mode='markers', name='Current selected features', marker=dict(size=15, color='#ef4444', symbol='star')))
     fig_whatif.update_layout(
         title=(
         f"Effect of {feature_descriptions.get(selected_feature, selected_feature)} on the Predicted House Price"),
