@@ -198,35 +198,10 @@ PYTEST
 
 ---
 
-## Getting Help
-
-**If you encounter issues:**
-
-1. **Check this SETUP.md** for common solutions
-2. **Message the team** in our WhatsApp/Messenger group
-3. **GitHub Issues** - open an issue on the repo
-4. **Office hours** with professor
-
----
-
-## Next Steps
-
-Once you have everything running:
-
-1. **Explore the Streamlit dashboard** - move sliders, see how LIME explanations change
-2. **Review the notebooks** - understand the data and model training process
-3. **Read the code** - `src/model.py` and `src/explainer.py`
-4. **Start collecting Slovenian data** - see `data/slovenian/template.csv`
-
----
-
 ## Useful Resources
 
 - **LIME Paper:** Ribeiro et al., 2016 - "Why Should I Trust You?"
 - **Streamlit Docs:** https://docs.streamlit.io
 - **California Housing Dataset:** https://scikit-learn.org/stable/datasets/real_world.html#california-housing-dataset
-- **Project Requirements:** See `Interaction_and_Information_Design_-_Project.pdf`
+- **Project Requirements:** See `report.pdf`
 
----
-
-**Questions? Issues? Reach out to the team!** 
