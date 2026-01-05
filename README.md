@@ -90,19 +90,4 @@ house-price-lime/
 
 ---
 
-
-## License
-
-This project is developed for academic purposes as part of the Interaction and Information Design course at University of Ljubljana.
-
----
-
-## Acknowledgments
-
-- California Housing Dataset from scikit-learn
-- LIME library by Marco Tulio Ribeiro et al.
-- Course instructors and teaching assistants
-
----
-
 **For detailed setup instructions, see [SETUP.md](SETUP.md)**
