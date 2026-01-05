@@ -44,7 +44,8 @@ streamlit run streamlit_app/app.py
 
 ## Demo
 
-![Dashboard Preview](docs/dashboard_preview.png) *(to be added)*
+[Video presentation](https://www.youtube.com/watch?v=ZoZm5TcCMiI)
+
 
 **Live Demo:** http://localhost:8501 (after running locally)
 
