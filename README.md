@@ -10,7 +10,7 @@ An interactive visualization system that explains house price predictions using 
 
 ## Project Overview
 
-This project combines machine learning with explainable AI to help users understand **what drives house prices**. Using the LIME algorithm, we provide transparent, interpretable explanations for individual price predictions.
+We trained a Random Forest on the California Housing dataset and built a Streamlit UI to explore predictions and LIME explanations.
 
 ### Key Features
 
@@ -82,13 +82,3 @@ house-price-lime/
 **Based on:**
 - Ribeiro et al., 2016: *"Why Should I Trust You?" Explaining the Predictions of Any Classifier*
 
-**Course Requirements:**
-- Research-based project extending existing approaches
-- Interactive visualization using D3.js/Vega-Lite or similar
-- Evaluation with user studies
-- 4-page VGTC format paper
-- 3-minute demo video
-
----
-
-**For detailed setup instructions, see [SETUP.md](SETUP.md)**
