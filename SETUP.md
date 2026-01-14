@@ -36,7 +36,6 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-You should see `(venv)` in your terminal prompt.
 
 ### 3. Install Dependencies
 ```bash
@@ -44,13 +43,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-This will install:
-- pandas, numpy, scikit-learn (data & ML)
-- lime (explanations)
-- streamlit, plotly (visualization)
-- jupyter (notebooks)
-
-**Installation time:** ~5-10 minutes
+This installs the main libraries we use (scikit-learn, LIME, Streamlit, Plotly, Altair, Jupyter..).
 
 ---
 
@@ -70,8 +63,6 @@ streamlit run streamlit_app/app.py
 - LIME explanation chart (green/red bars)
 - What-if analysis at bottom
 
-**To stop:** Press `Ctrl+C` in terminal
-
 ---
 
 ### Option B: Run Jupyter Notebooks (Development)
@@ -86,7 +77,6 @@ jupyter notebook
 1. `notebooks/01_data_acquisition.ipynb` - Load California Housing dataset
 2. `notebooks/02_train_model.ipynb` - Train Random Forest model with LIME
 
-**Run notebooks:** Click "Cell → Run All" or use the ▶▶ button
 
 ---
 
@@ -114,26 +104,20 @@ house-price-lime/
 
 ## First Time Setup - Train the Model
 
-**Important:** The trained model (`house_price_model.pkl`) is NOT in Git because it's 34MB.  
-You need to train it once:
+We don’t commit the trained model file because it’s big (~30MB).  
+After training you should have:  
+`models/house_price_model.pkl`
+
+Run:
 ```bash
-# Activate venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-
-# Start Jupyter
 jupyter notebook
+Then open and run:
+notebooks/02_train_model.ipynb
+Check the model file:
+ls -lh models
 
-# In browser:
-# 1. Open and run: notebooks/01_data_acquisition.ipynb
-# 2. Open and run: notebooks/02_train_model.ipynb
-```
 
-**Expected results:**
-- RMSE: ~0.5 (meaning ±$50k error)
-- R² score: ~0.80-0.85
-- Model saved to: `models/house_price_model.pkl`
 
-**Training time:** ~2-3 minutes
 
 ---
 
