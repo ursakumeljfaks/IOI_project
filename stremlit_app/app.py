@@ -291,7 +291,7 @@ elif page == "Data Exploration":
                 size=alt.Size('Population:Q', scale=alt.Scale(range=[10, 500])),
                 tooltip=['MedHouseVal', 'MedInc', 'HouseAge', 'Population'],
             )
-            .project(type="mercator")   # <-- KEY FIX
+            .project(type="mercator")  
         )
 
         geo_chart = (
